@@ -21,13 +21,14 @@ import Observation
 extension Library {
     /// Adds a book to the library.
     ///
-    /// The title is trimmed, and a book with a blank title is ignored.
+    /// The title is trimmed, and a blank title throws an error.
     /// If an author with the same name already exists, the book uses
     /// that author instead of adding a duplicate.
     /// - Parameter book: The book to add.
-    func add(_ book: Book) {
+    /// - Throws: ``LibraryError/blankTitle`` if the title is blank.
+    func add(_ book: Book) throws(LibraryError) {
         let trimmed = book.title.trimmed
-        guard Book.isValidTitle(trimmed) else { return }
+        guard Book.isValidTitle(trimmed) else { throw .blankTitle }
         let author = fetchOrAdd(book.author)
         book.author = author
         book.title = trimmed
