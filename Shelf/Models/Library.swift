@@ -5,21 +5,26 @@
 //  Created by Victor Hudson on 11/9/26.
 //
 
-import Observation
 import Foundation
+import Observation
 
-
-// This class is the data store that manages books in the collection
-@Observable class Library {
-    
+/// The app's in-memory store of books and their authors.
+@Observable final class Library {
+    /// Every book in the library, in the order it was added.
     private(set) var books: [Book] = []
-    private(set) var authors: [Author] = []
 
+    /// Every unique author in the library, added automatically by ``add(_:)``.
+    private(set) var authors: [Author] = []
 }
 
 // MARK: - Book Management
 extension Library {
-    
+    /// Adds a book to the library.
+    ///
+    /// The title is trimmed, and a book with a blank title is ignored.
+    /// If an author with the same name already exists, the book uses
+    /// that author instead of adding a duplicate.
+    /// - Parameter book: The book to add.
     func add(_ book: Book) {
         let trimmed = book.title.trimmed
         guard Book.isValidTitle(trimmed) else { return }
@@ -28,21 +33,30 @@ extension Library {
         book.title = trimmed
         books.append(book)
     }
-    
+
+    /// Removes a book from the library.
+    ///
+    /// The book's author stays in ``authors``.
+    /// - Parameter book: The book to remove. Does nothing if it isn't in the library.
     func remove(_ book: Book) {
-        guard let index = books.firstIndex(of: book) else {
-            return
-        }
-        books.remove(at: index)
+        books.removeAll { $0.id == book.id }
     }
 }
 
-// MARK: - Author Managment
+// MARK: - Author Management
 extension Library {
+    /// Returns the library's matching author, or adds the given one if there's no match.
+    ///
+    /// Names are compared by ``Author/displayName``, ignoring case.
+    /// - Parameter author: The author to look up.
+    /// - Returns: The existing author, or `author` if it was just added.
     func fetchOrAdd(_ author: Author) -> Author {
-        guard let existingAuthor = authors.first (where: {
-            $0.displayName.localizedCaseInsensitiveCompare(author.displayName) == .orderedSame
-        })
+        guard
+            let existingAuthor = authors.first(where: {
+                $0.displayName.localizedCaseInsensitiveCompare(
+                    author.displayName
+                ) == .orderedSame
+            })
         else {
             authors.append(author)
             return author
