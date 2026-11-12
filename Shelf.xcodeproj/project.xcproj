@@ -12,7 +12,26 @@
   },
   "files": [
     { "kind": "folder", "path": "Shelf", "target-membership": [ "Shelf" ] },
-    { "kind": "folder", "path": "ShelfTests", "target-membership": [ "ShelfTests" ] },
+    {
+      "kind": "folder",
+      "path": "ShelfTests",
+      "target-membership": [
+        "ShelfTests",
+      ],
+      "membership-exceptions": [
+        {
+          "target": "ShelfTests",
+          "exclusions": [
+            "Helpers/TestFixtures.swift",
+          ],
+        }, {
+          "build-phase": "ShelfTests/resources",
+          "inclusions": [
+            "Helpers/TestFixtures.swift",
+          ],
+        },
+      ],
+    },
     { "kind": "folder", "path": "ShelfUITests", "target-membership": [ "ShelfUITests" ] },
     {
       "kind": "group",

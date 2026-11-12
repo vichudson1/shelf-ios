@@ -1,6 +1,6 @@
 //
-//  ShelfTests.swift
-//  ShelfTests
+//  LibraryTests.swift
+//  LibraryTests
 //
 //  Created by Victor Hudson on 11/5/26.
 //
@@ -10,7 +10,8 @@ import Testing
 
 @MainActor
 struct LibraryTests {
-    @Test func addKeepsCleanTitle() throws {
+    @Test("Clean titles are saved as-is")
+    func addKeepsCleanTitle() throws {
         let library = Library()
         let book = Book(
             title: "Dune",
@@ -24,7 +25,8 @@ struct LibraryTests {
         #expect(library.books.first?.title == "Dune")
     }
 
-    @Test func addTrimsTitle() throws {
+    @Test("Titles are trimmed")
+    func addTrimsTitle() throws {
         let library = Library()
         let book = Book(
             title: "  Dune\n",
@@ -38,7 +40,7 @@ struct LibraryTests {
         #expect(library.books.first?.title == "Dune")
     }
 
-    @Test(arguments: ["", "   ", "\n"])
+    @Test("Blank titles are rejected", arguments: ["", "   ", "\n"])
     func addRejectsBlankTitle(title: String) {
         let library = Library()
         let book = Book(
@@ -53,7 +55,8 @@ struct LibraryTests {
         #expect(library.books.isEmpty)
     }
 
-    @Test func addKeepsDifferentAuthorsSeparate() throws {
+    @Test("Different authors stay separate")
+    func addKeepsDifferentAuthorsSeparate() throws {
         let library = Library()
         let book1 = Book(
             title: "Project Hail Mary",
