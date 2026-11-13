@@ -51,7 +51,7 @@ extension Library {
     /// Names are compared by ``Author/displayName``, ignoring case.
     /// - Parameter author: The author to look up.
     /// - Returns: The existing author, or `author` if it was just added.
-    func fetchOrAdd(_ author: Author) -> Author {
+    private func fetchOrAdd(_ author: Author) -> Author {
         guard
             let existingAuthor = authors.first(where: {
                 $0.displayName.localizedCaseInsensitiveCompare(
